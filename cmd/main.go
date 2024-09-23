@@ -29,7 +29,10 @@ func main() {
 	})
 
 	server.GET("/filmes", FilmeController.GetFilmes)
-	server.POST("/filme", FilmeController.CreateFilme) // Testar requisição de criar
+	server.POST("/filmes", FilmeController.CreateFilme)
+	server.GET("/filmes/:filmeId", FilmeController.GetFilmesById)
+	server.PUT("/filmes/:filmeId", FilmeController.AtualizarFilme)
+	server.DELETE("/filmes/:filmeId", FilmeController.DeletarFilme)
 
 	server.Run(":8080")
 

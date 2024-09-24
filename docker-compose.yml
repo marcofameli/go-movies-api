@@ -1,4 +1,12 @@
 services:
+  go_app:
+    container_name: go-app
+    image: go-api-movie
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - go_db
   go_db:
     container_name: go_db
     image: postgres:16

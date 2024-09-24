@@ -3,6 +3,7 @@ package main
 import (
 	"awesomeProject/controller"
 	"awesomeProject/db"
+	"awesomeProject/middleware"
 	"awesomeProject/repository"
 	"awesomeProject/usecase"
 	"github.com/gin-gonic/gin"
@@ -28,12 +29,16 @@ func main() {
 		})
 	})
 
-	server.GET("/filmes", FilmeController.GetFilmes)
-	server.POST("/filmes", FilmeController.CreateFilme)
-	server.GET("/filmes/:filmeId", FilmeController.GetFilmesById)
-	server.PUT("/filmes/:filmeId", FilmeController.AtualizarFilme)
-	server.DELETE("/filmes/:filmeId", FilmeController.DeletarFilme)
+	authorized := server.Group("/filmes")
+	authorized.Use(middleware.BasicAuth())
+	{
 
+		authorized.GET("", FilmeController.GetFilmes)                // Rota: /filmes
+		authorized.POST("", FilmeController.CreateFilme)             // Rota: /filmes
+		authorized.GET("/:filmeId", FilmeController.GetFilmesById)   // Rota: /filmes/:filmeId
+		authorized.PUT("/:filmeId", FilmeController.AtualizarFilme)  // Rota: /filmes/:filmeId
+		authorized.DELETE("/:filmeId", FilmeController.DeletarFilme) // Rota: /filmes/:filmeId
+	}
 	server.Run(":8080")
 
 }

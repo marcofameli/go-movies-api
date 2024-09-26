@@ -3,8 +3,8 @@ package main
 import (
 	"awesomeProject/controller"
 	"awesomeProject/db"
-	"awesomeProject/middleware"
 	"awesomeProject/repository"
+	"awesomeProject/routes" // Importando o novo pacote de rotas
 	"awesomeProject/usecase"
 	"github.com/gin-gonic/gin"
 )
@@ -16,11 +16,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	//Camada de Repository
+	// Camada de Repository
 	FilmeRepository := repository.NewFilmeRepository(dbConnection)
-	//Camada useCase
+	// Camada useCase
 	FilmeUseCase := usecase.NewFilmeUseCase(FilmeRepository)
-	//Camada de controllers
+	// Camada de controllers
 	FilmeController := controller.NewFilmeController(FilmeUseCase)
 
 	server.GET("/ping", func(ctx *gin.Context) {
@@ -29,15 +29,8 @@ func main() {
 		})
 	})
 
-	authorized := server.Group("/filmes")
-	authorized.Use(middleware.BasicAuth())
-	{
-		authorized.GET("", FilmeController.GetFilmes)                // Rota: /filmes
-		authorized.POST("", FilmeController.CreateFilme)             // Rota: /filmes
-		authorized.GET("/:filmeId", FilmeController.GetFilmesById)   // Rota: /filmes/:filmeId
-		authorized.PUT("/:filmeId", FilmeController.AtualizarFilme)  // Rota: /filmes/:filmeId
-		authorized.DELETE("/:filmeId", FilmeController.DeletarFilme) // Rota: /filmes/:filmeId
-	}
-	server.Run(":8080")
+	// Chamando a função para configurar as rotas
+	routes.SetupFilmeRoutes(server.Group("/filmes"), &FilmeController)
 
+	server.Run(":8080")
 }

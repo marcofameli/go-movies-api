@@ -9,17 +9,17 @@ import (
 	"strconv"
 )
 
-type filmesController struct {
+type FilmesController struct {
 	filmeUseCase usecase.FilmeUseCase
 }
 
-func NewFilmeController(usecase usecase.FilmeUseCase) filmesController {
-	return filmesController{
+func NewFilmeController(usecase usecase.FilmeUseCase) FilmesController {
+	return FilmesController{
 		filmeUseCase: usecase,
 	}
 }
 
-func (f *filmesController) GetFilmes(ctx *gin.Context) {
+func (f *FilmesController) GetFilmes(ctx *gin.Context) {
 	filmes, err := f.filmeUseCase.GetFilmes()
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{})
@@ -27,7 +27,7 @@ func (f *filmesController) GetFilmes(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, filmes)
 }
 
-func (f *filmesController) CreateFilme(ctx *gin.Context) {
+func (f *FilmesController) CreateFilme(ctx *gin.Context) {
 	var filme model.Filme
 	err := ctx.BindJSON(&filme)
 	if err != nil {
@@ -42,7 +42,7 @@ func (f *filmesController) CreateFilme(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, insertedFilme)
 }
 
-func (f *filmesController) GetFilmesById(ctx *gin.Context) {
+func (f *FilmesController) GetFilmesById(ctx *gin.Context) {
 
 	id := ctx.Param("filmeId")
 	if id == "" {
@@ -79,7 +79,7 @@ func (f *filmesController) GetFilmesById(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, filmes)
 }
 
-func (f *filmesController) AtualizarFilme(ctx *gin.Context) {
+func (f *FilmesController) AtualizarFilme(ctx *gin.Context) {
 	id := ctx.Param("filmeId")
 
 	if id == "" {
@@ -115,7 +115,7 @@ func (f *filmesController) AtualizarFilme(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, filmeAtualizado)
 }
 
-func (f *filmesController) DeletarFilme(ctx *gin.Context) {
+func (f *FilmesController) DeletarFilme(ctx *gin.Context) {
 	id := ctx.Param("filmeId")
 
 	if id == "" {

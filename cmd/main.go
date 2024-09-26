@@ -32,7 +32,6 @@ func main() {
 	authorized := server.Group("/filmes")
 	authorized.Use(middleware.BasicAuth())
 	{
-
 		authorized.GET("", FilmeController.GetFilmes)                // Rota: /filmes
 		authorized.POST("", FilmeController.CreateFilme)             // Rota: /filmes
 		authorized.GET("/:filmeId", FilmeController.GetFilmesById)   // Rota: /filmes/:filmeId
